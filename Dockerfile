@@ -20,5 +20,6 @@ COPY src/ .
 
 COPY .env .env
 
+
 # Command to run the main Python script (assuming main.py is your main script)
-CMD ["python", "./main.py"]
+CMD ["python", "./bot/main.py"]

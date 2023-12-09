@@ -10,7 +10,8 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.types import Document, Video
 
 config = dotenv_values('.env')
-TOKEN = getenv('TELEGRAM_TOKEN')
+TOKEN = config.get('TOKEN')
+
 
 class TelegramBot:
     def __init__(self, token: str):
