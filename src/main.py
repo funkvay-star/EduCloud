@@ -4,10 +4,12 @@ import logging
 import sys
 from os import getenv
 from typing import Any
+from dotenv import dotenv_values
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import Document, Video
 
+config = dotenv_values('.env')
 TOKEN = getenv('TELEGRAM_TOKEN')
 
 class TelegramBot:
@@ -38,7 +40,6 @@ class TelegramBot:
         await self.dp.start_polling(self.bot)
 
 async def main() -> None:
-    # Initialize and start the Telegram Bot
     bot = TelegramBot(TOKEN)
     await bot.start_polling()
 
