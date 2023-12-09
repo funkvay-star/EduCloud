@@ -21,7 +21,7 @@ class TelegramBot:
     def __init__(self, token: str):
         self.bot = Bot(token)
         self.dp = Dispatcher()
-        self.file_receiver = FileReceiver()  # Initialize the FileReceiver object
+        self.file_receiver = FileReceiver()
 
         # Register the content handler
         self.dp.message.register(self.content_handler)
