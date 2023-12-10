@@ -1,14 +1,10 @@
-import re
 import asyncio
 import logging
 import sys
-from os import getenv
-from typing import Any
 from dotenv import dotenv_values
 
 # aiogram modules
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import Document, Video
 
 # our modules
 from file_receiver import FileReceiver
@@ -33,10 +29,11 @@ class TelegramBot:
 
         except Exception as e:
             logging.error(f"Error occurred: {e}")
-            await message.answer("An error occurred while processing the message.")
+            await message.answer("Error processing the message.")
 
     async def start_polling(self) -> None:
         await self.dp.start_polling(self.bot)
+
 
 async def main() -> None:
     bot = TelegramBot(TOKEN)

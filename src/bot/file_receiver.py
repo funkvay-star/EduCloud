@@ -1,13 +1,17 @@
 import re
 import logging
 from aiogram import types
-import datetime
+
 
 class FileReceiver:
-    MB = 1024 * 1024 # Bytes in megabyte
-    DOCUMENT_SIZE_LIMIT = 100 * MB # 100 MB
+    MB = 1024 * 1024  # Bytes in megabyte
+    DOCUMENT_SIZE_LIMIT = 100 * MB  # 100 MB
     VIDEO_SIZE_LIMIT = 500 * MB  # 500 MB
-    URL_PATTERN = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+    URL_PATTERN = (
+        r'http[s]?://'  # Scheme
+        r'(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]'
+        r'|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+    )
 
     @staticmethod
     def is_url(message_content):
@@ -28,7 +32,7 @@ class FileReceiver:
 
         except Exception as e:
             logging.error(f"Error occurred: {e}")
-            await message.answer("An error occurred while processing the message.")
+            await message.answer("Error processing the message.")
 
     async def handle_link(self, message: types.Message):
         # TODO Handle link-specific logic
@@ -61,7 +65,11 @@ class FileReceiver:
     def create_metadata(self, message: types.Message):
         sender = message.from_user
         sender_id = sender.id if sender else None
-        sender_username = f"@{sender.username}" if sender and sender.username else "No username"
+
+        if sender and sender.username:
+            sender_username = f"@{sender.username}"
+        else:
+            sender_username = "No username"
 
         if sender:
             sender_name = sender.first_name
@@ -84,11 +92,11 @@ class FileReceiver:
         }
 
         return metadata
-    
+
     def print_metadata(self, metadata):
         for key, value in metadata.items():
             print(f"{key}: {value}")
-    
+
     def determine_message_type(self, message: types.Message):
         message_content = message.text or ""
         if self.is_url(message_content):
@@ -101,7 +109,7 @@ class FileReceiver:
             return "text"
         else:
             return "unknown"
-        
+
     def get_file_size(self, message: types.Message):
         message_type = self.determine_message_type(message)
 
