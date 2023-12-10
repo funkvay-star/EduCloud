@@ -1,0 +1,31 @@
+name: Docker Build and Run Test
+
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Build Docker Image
+      run: docker build -t telegram_bot_docker .
+
+    - name: Run Docker Container
+      run: |
+        docker run -d --name telegram_bot telegram_bot_docker
+        
+    - name: Sleep For a Short Time
+      run: sleep 30s  # Wait for a short time to let the bot start
+
+    - name: Check Logs for Bot Start
+      run: |
+        if docker logs telegram_bot | grep -q "INFO:aiogram.dispatcher:Start polling"; then
+          echo "Bot started successfully"
+          docker stop telegram_bot
+        else
+          echo "Bot did not start successfully"
+          exit 1
+        fi
