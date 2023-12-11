@@ -1,4 +1,9 @@
-# EduCloud
+<p align="center">
+  <img src="/img/Telegram_bot_logo.png" alt="Logo" style="border-radius: 50%;" width="200" height="200" />
+  <br>
+  <b>EduCloud</b>
+</p>
+
 A Python-based Telegram bot leveraging GCP to organize and share academic resources like PDFs and videos, tailored for university students by faculty and degree.
 
 ## Setup
