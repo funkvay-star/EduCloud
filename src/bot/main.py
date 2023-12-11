@@ -1,8 +1,6 @@
 import asyncio
 import logging
 import sys
-from dotenv import dotenv_values
-from pathlib import Path
 
 # aiogram modules
 from aiogram import Bot, Dispatcher, types

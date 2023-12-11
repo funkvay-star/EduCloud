@@ -1,8 +1,5 @@
-import re
 import logging
 from aiogram import types
-import sys
-from pathlib import Path
 
 # our modules
 from src.helperModules.message_helper import MessageHelper

@@ -1,7 +1,4 @@
-import re
 from aiogram import types
-import sys
-from pathlib import Path
 
 # our modules
 from src.helperModules.string_helper import StringHelper

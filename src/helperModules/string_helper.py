@@ -10,5 +10,5 @@ class StringHelper:
 
     @staticmethod
     def is_url(message_content):
-        return re.match(StringHelper.URL_PATTERN, 
+        return re.match(StringHelper.URL_PATTERN,
                         message_content)
