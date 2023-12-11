@@ -7,13 +7,9 @@ from pathlib import Path
 # aiogram modules
 from aiogram import Bot, Dispatcher, types
 
-# to include other modules
-src_path = Path(__file__).resolve().parents[1]
-sys.path.append(str(src_path))
-
 # our modules
-from file_receiver import FileReceiver
-from helperModules.definitions import TOKEN
+from src.bot.file_receiver import FileReceiver
+from src.helperModules.definitions import TOKEN
 
 
 class TelegramBot:

@@ -3,12 +3,8 @@ from aiogram import types
 import sys
 from pathlib import Path
 
-# to include other modules
-src_path = Path(__file__).resolve().parents[1]
-sys.path.append(str(src_path))
-
 # our modules
-from helperModules.string_helper import StringHelper
+from src.helperModules.string_helper import StringHelper
 
 
 class MessageHelper:

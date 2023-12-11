@@ -4,12 +4,8 @@ from aiogram import types
 import sys
 from pathlib import Path
 
-# to include other modules
-src_path = Path(__file__).resolve().parents[1]
-sys.path.append(str(src_path))
-
 # our modules
-from helperModules.message_helper import MessageHelper
+from src.helperModules.message_helper import MessageHelper
 
 
 class FileReceiver:
