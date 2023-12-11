@@ -1,25 +1,25 @@
 import re
 import logging
 from aiogram import types
+import sys
+from pathlib import Path
+
+# to include other modules
+src_path = Path(__file__).resolve().parents[1]
+sys.path.append(str(src_path))
+
+# our modules
+from helperModules.message_helper import MessageHelper
 
 
 class FileReceiver:
     MB = 1024 * 1024  # Bytes in megabyte
     DOCUMENT_SIZE_LIMIT = 100 * MB  # 100 MB
     VIDEO_SIZE_LIMIT = 500 * MB  # 500 MB
-    URL_PATTERN = (
-        r'http[s]?://'  # Scheme
-        r'(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]'
-        r'|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
-    )
-
-    @staticmethod
-    def is_url(message_content):
-        return re.match(FileReceiver.URL_PATTERN, message_content)
 
     async def classify_and_handle_message(self, message: types.Message):
         try:
-            message_type = self.determine_message_type(message)
+            message_type = MessageHelper.determine_message_type(message)
 
             if message_type == "link":
                 await self.handle_link(message)
@@ -78,8 +78,8 @@ class FileReceiver:
         else:
             sender_name = "No name"
 
-        message_type = self.determine_message_type(message)
-        timestamp = message.date.isoformat()
+        message_type = MessageHelper.determine_message_type(message)
+        iso_formatted_date = message.date.isoformat()
         file_size = self.get_file_size(message)
 
         metadata = {
@@ -87,7 +87,7 @@ class FileReceiver:
             "sender_username": sender_username,
             "sender_name": sender_name,
             "message_type": message_type,
-            "timestamp": timestamp,
+            "iso_formatted_date": iso_formatted_date,
             "file_size in bytes": file_size,
         }
 
@@ -97,21 +97,8 @@ class FileReceiver:
         for key, value in metadata.items():
             print(f"{key}: {value}")
 
-    def determine_message_type(self, message: types.Message):
-        message_content = message.text or ""
-        if self.is_url(message_content):
-            return "link"
-        elif isinstance(message.document, types.Document):
-            return "document"
-        elif isinstance(message.video, types.Video):
-            return "video"
-        elif message.text:
-            return "text"
-        else:
-            return "unknown"
-
     def get_file_size(self, message: types.Message):
-        message_type = self.determine_message_type(message)
+        message_type = MessageHelper.determine_message_type(message)
 
         if message_type == "document":
             return message.document.file_size
@@ -119,4 +106,4 @@ class FileReceiver:
             return message.video.file_size
         else:
             # No file size for other types (like link or text)
-            return None
+            return 0

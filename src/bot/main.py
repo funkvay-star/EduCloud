@@ -2,15 +2,18 @@ import asyncio
 import logging
 import sys
 from dotenv import dotenv_values
+from pathlib import Path
 
 # aiogram modules
 from aiogram import Bot, Dispatcher, types
 
+# to include other modules
+src_path = Path(__file__).resolve().parents[1]
+sys.path.append(str(src_path))
+
 # our modules
 from file_receiver import FileReceiver
-
-config = dotenv_values('.env')
-TOKEN = config.get('TOKEN')
+from helperModules.definitions import TOKEN
 
 
 class TelegramBot:
