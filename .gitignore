@@ -25,3 +25,5 @@ var/
 venv*
 dump*
 .env
+
+.idea

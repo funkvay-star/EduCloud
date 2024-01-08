@@ -1,17 +1,12 @@
-import sys
-import time
 
-from Logger.FileSystemLoguruLogger import MainLogger
+from src.Logger.FileSystemLoguruLogger import MainLogger
 
 
+def handle_exceptions(func):
+    def result():
+        try:
+            func()
+        except Exception as e:
+            MainLogger.log_error(e)
 
-def init_exception_handling():
-    def exception_hook(type, value, traceback):
-        if type == KeyboardInterrupt:
-            pass
-        else:
-            print("exception handled")
-            MainLogger.log_error(value)
-            sys.__excepthook__(type, value, traceback)
-
-    sys.excepthook = exception_hook
+    return result
