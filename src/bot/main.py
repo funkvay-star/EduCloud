@@ -5,6 +5,7 @@ import sys
 # aiogram modules
 from aiogram import Bot, Dispatcher, types
 
+from src.Logger.exceptionHandler import handle_exceptions
 # our modules
 from src.bot.file_receiver import FileReceiver
 from src.helperModules.definitions import TOKEN
@@ -32,10 +33,10 @@ class TelegramBot:
         await self.dp.start_polling(self.bot)
 
 
+@handle_exceptions
 async def main() -> None:
-    bot = TelegramBot(TOKEN)
-    await bot.start_polling()
+        bot = TelegramBot(TOKEN)
+        await bot.start_polling()
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     asyncio.run(main())

@@ -1,12 +1,12 @@
 import logging
 from aiogram import types
 
+from src.helperModules.definitions import MB
 # our modules
 from src.helperModules.message_helper import MessageHelper
 
 
 class FileReceiver:
-    MB = 1024 * 1024  # Bytes in megabyte
     DOCUMENT_SIZE_LIMIT = 100 * MB  # 100 MB
     VIDEO_SIZE_LIMIT = 500 * MB  # 500 MB
 
