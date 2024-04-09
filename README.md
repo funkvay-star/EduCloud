@@ -13,7 +13,6 @@ A Python-based Telegram bot leveraging GCP to organize and share academic resour
 * <a href="https://cloud.google.com"><img src="https://seeklogo.com/images/G/google-cloud-logo-6B950E8ADB-seeklogo.com.png" alt="Google Cloud Platform (GCP)" width="30" height="25"/> Google Cloud Platform (GCP)</a>
 * <a href="https://www.docker.com"><img src="https://cdn.worldvectorlogo.com/logos/docker-4.svg" alt="Docker" width="30" height="30"/> Docker</a>
 
-
 ## Setup
 1. Create a copy of .env_example and rename it to .env.
 2. Fill in all the necessary variables in the .env file.
@@ -21,8 +20,7 @@ A Python-based Telegram bot leveraging GCP to organize and share academic resour
 ## Running the Application
 To build the Docker image and start the application, run the following commands:
 ```py
-docker build .
-docker-compose up
+docker build -t telegram_bot .
+docker run -it --name Telegram_bot telegram_bot
 ```
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
