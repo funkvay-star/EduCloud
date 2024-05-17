@@ -17,6 +17,7 @@ class TelegramBot:
         self.bot = Bot(token)
         self.dp = Dispatcher()
         self.file_receiver = FileReceiver()
+        MainLogger.log_info("Bot STARTED")
 
         # Register the content handler
         self.dp.message.register(self.content_handler)
@@ -36,7 +37,6 @@ class TelegramBot:
 
 @handle_exceptions
 async def main() -> None:
-    MainLogger.log_info("Starting the bot with token: AmigoBot")
     bot = TelegramBot(TOKEN)
     await bot.start_polling()
 

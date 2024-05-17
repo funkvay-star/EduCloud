@@ -26,7 +26,7 @@ jobs:
 
     - name: Check Logs for Bot Start
       run: |
-        if docker logs telegram_bot | grep -q "INFO:aiogram.dispatcher:Start polling"; then
+        if docker logs telegram_bot | grep -q "Bot STARTED"; then
           echo "Bot started successfully"
           docker stop telegram_bot
         else
