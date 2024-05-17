@@ -1,4 +1,3 @@
-import logging
 from aiogram import types
 
 from src.helperModules.definitions import MB
@@ -69,7 +68,11 @@ class FileReceiver:
         sender = message.from_user
         sender_id = sender.id if sender else None
 
-        sender_username = f"@{sender.username}" if sender and sender.username else "No username"
+        if sender and sender.username:
+            sender_username = f"@{sender.username}"
+        else:
+            sender_username = "No username"
+        
         sender_name = sender.first_name if sender else "No name"
         if sender and sender.last_name:
             sender_name += f" {sender.last_name}"

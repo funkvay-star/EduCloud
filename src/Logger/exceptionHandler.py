@@ -1,6 +1,7 @@
 from functools import wraps
 from src.Logger.FileSystemLoguruLogger import MainLogger
 
+
 def handle_exceptions(func):
     @wraps(func)
     def wrapper(*args, **kwargs):

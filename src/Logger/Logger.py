@@ -1,5 +1,6 @@
 from abc import abstractmethod, ABCMeta
 
+
 class Logger(metaclass=ABCMeta):
     @abstractmethod
     def log_error(self, error):
