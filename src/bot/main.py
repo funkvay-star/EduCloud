@@ -1,4 +1,5 @@
 import asyncio
+import os
 
 # aiogram modules
 from aiogram import Bot, Dispatcher, types
@@ -11,6 +12,8 @@ from src.Logger.FileSystemLoguruLogger import MainLogger
 from src.bot.file_receiver import FileReceiver
 from src.helperModules.definitions import TOKEN
 
+STATUS_FILE_PATH = os.getenv("STATUS_FILE_PATH", "/tmp/bot_status.txt")
+
 
 class TelegramBot:
     def __init__(self, token: str):
@@ -18,6 +21,10 @@ class TelegramBot:
         self.dp = Dispatcher()
         self.file_receiver = FileReceiver()
         MainLogger.log_info("Bot STARTED")
+
+        # Create a status file
+        with open(STATUS_FILE_PATH, "w") as f:
+            f.write("Bot STARTED")
 
         # Register the content handler
         self.dp.message.register(self.content_handler)

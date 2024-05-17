@@ -72,7 +72,7 @@ class FileReceiver:
             sender_username = f"@{sender.username}"
         else:
             sender_username = "No username"
-        
+
         sender_name = sender.first_name if sender else "No name"
         if sender and sender.last_name:
             sender_name += f" {sender.last_name}"
