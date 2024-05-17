@@ -2,3 +2,4 @@ aiogram
 python-dotenv
 loguru
 pytest
+psycopg2
