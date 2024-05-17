@@ -4,6 +4,7 @@ from aiogram import types
 from src.helperModules.definitions import MB
 # our modules
 from src.helperModules.message_helper import MessageHelper
+from src.Logger.FileSystemLoguruLogger import MainLogger
 
 
 class FileReceiver:
@@ -13,6 +14,7 @@ class FileReceiver:
     async def classify_and_handle_message(self, message: types.Message):
         try:
             message_type = MessageHelper.determine_message_type(message)
+            MainLogger.log_info(f"Message type determined: {message_type}")
 
             if message_type == "link":
                 await self.handle_link(message)
@@ -24,52 +26,53 @@ class FileReceiver:
                 await self.handle_unknown_content(message)
 
         except Exception as e:
-            logging.error(f"Error occurred: {e}")
+            MainLogger.log_error(f"Error occurred: {e}")
             await message.answer("Error processing the message.")
 
     async def handle_link(self, message: types.Message):
-        # TODO Handle link-specific logic
+        MainLogger.log_info("Handling link")
         metadata = self.create_metadata(message)
-        self.print_metadata(metadata)
+        self.log_metadata(metadata)
         await message.answer("This is a link")
 
     async def handle_document(self, message: types.Message):
-        # TODO Handle document-specific logic, including size check
-        if message.document.file_size > self.DOCUMENT_SIZE_LIMIT:
-            await message.answer("Document size exceeds 100 MB limit.")
-            return
-        metadata = self.create_metadata(message)
-        self.print_metadata(metadata)
-        # TODO Further processing (e.g., storage)
+        MainLogger.log_info("Handling document")
+        try:
+            if message.document.file_size > self.DOCUMENT_SIZE_LIMIT:
+                await message.answer("Document size exceeds 100 MB limit.")
+                return
+            metadata = self.create_metadata(message)
+            self.log_metadata(metadata)
+            await message.answer("Document received")
+        except Exception as e:
+            MainLogger.log_error(f"Error handling document: {e}")
+            await message.answer("Error processing the document.")
 
     async def handle_video(self, message: types.Message):
-        # TODO Handle video-specific logic, including size check
-        if message.video.file_size > self.VIDEO_SIZE_LIMIT:
-            await message.answer("Video size exceeds 500 MB limit.")
-            return
-        metadata = self.create_metadata(message)
-        self.print_metadata(metadata)
-        # TODO Further processing (e.g., storage)
+        MainLogger.log_info("Handling video")
+        try:
+            if message.video.file_size > self.VIDEO_SIZE_LIMIT:
+                await message.answer("Video size exceeds 500 MB limit.")
+                return
+            metadata = self.create_metadata(message)
+            self.log_metadata(metadata)
+            await message.answer("Video received")
+        except Exception as e:
+            MainLogger.log_error(f"Error handling video: {e}")
+            await message.answer("Error processing the video.")
 
     async def handle_unknown_content(self, message: types.Message):
-        # TODO Handle unknown content type logic
+        MainLogger.log_info("Handling unknown content")
         await message.answer("Unknown content type")
 
     def create_metadata(self, message: types.Message):
         sender = message.from_user
         sender_id = sender.id if sender else None
 
-        if sender and sender.username:
-            sender_username = f"@{sender.username}"
-        else:
-            sender_username = "No username"
-
-        if sender:
-            sender_name = sender.first_name
-            if sender.last_name:
-                sender_name += f" {sender.last_name}"
-        else:
-            sender_name = "No name"
+        sender_username = f"@{sender.username}" if sender and sender.username else "No username"
+        sender_name = sender.first_name if sender else "No name"
+        if sender and sender.last_name:
+            sender_name += f" {sender.last_name}"
 
         message_type = MessageHelper.determine_message_type(message)
         iso_formatted_date = message.date.isoformat()
@@ -86,9 +89,9 @@ class FileReceiver:
 
         return metadata
 
-    def print_metadata(self, metadata):
+    def log_metadata(self, metadata):
         for key, value in metadata.items():
-            print(f"{key}: {value}")
+            MainLogger.log_info(f"{key}: {value}")
 
     def get_file_size(self, message: types.Message):
         message_type = MessageHelper.determine_message_type(message)
@@ -98,5 +101,4 @@ class FileReceiver:
         elif message_type == "video":
             return message.video.file_size
         else:
-            # No file size for other types (like link or text)
-            return 0
+            return 0  # No file size for other types (like link or text)
