@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod, ABCMeta
+from abc import abstractmethod, ABCMeta
 
 class Logger(metaclass=ABCMeta):
     @abstractmethod

@@ -4,6 +4,7 @@ import sys
 from src.helperModules.definitions import MB
 from src.Logger.Logger import Logger
 
+
 class FileSystemLoguruLogger(Logger):
     FILE_SYSTEM_LOGGER_FILE_SIZE = 500 * MB
 
@@ -15,8 +16,8 @@ class FileSystemLoguruLogger(Logger):
         print(f"Log path: {self._log_path}")
         logger.remove()
         logger.add(sys.stderr, level="DEBUG")
-        logger.add(self._log_path, 
-                   format="{time} {level} {message}", 
+        logger.add(self._log_path,
+                   format="{time} {level} {message}",
                    backtrace=True,
                    rotation=self._rotate_logs,
                    retention="10 days")  # Keep log files for 10 days
@@ -42,5 +43,6 @@ class FileSystemLoguruLogger(Logger):
         if file.tell() > self.FILE_SYSTEM_LOGGER_FILE_SIZE:
             return True  # Rotate the log file
         return False  # Don't rotate the log file
+
 
 MainLogger = FileSystemLoguruLogger()
