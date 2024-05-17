@@ -14,13 +14,44 @@ class FileSystemLoguruLogger(Logger):
             os.makedirs(log_dir)
         self._log_path = os.path.join(log_dir, "application.log")
         print(f"Log path: {self._log_path}")
+
+        # Remove any default handlers
         logger.remove()
-        logger.add(sys.stderr, level="DEBUG")
-        logger.add(self._log_path,
-                   format="{time} {level} {message}",
-                   backtrace=True,
-                   rotation=self._rotate_logs,
-                   retention="10 days")  # Keep log files for 10 days
+
+        # Standard logging configuration
+        logger.add(
+            sys.stderr,
+            level="DEBUG",
+            format="<green>{time}</green> <level>{level}</level> "
+                   "<cyan>{name}</cyan>:<cyan>{function}</cyan>:"
+                   "<cyan>{line}</cyan> - <level>{message}</level>",
+            filter=lambda record: not record["extra"].get("metadata_block", False)
+        )
+        logger.add(
+            self._log_path,
+            format="<green>{time}</green> <level>{level}</level> "
+                   "<cyan>{name}</cyan>:<cyan>{function}</cyan>:"
+                   "<cyan>{line}</cyan> - <level>{message}</level>",
+            filter=lambda record: not record["extra"].get("metadata_block", False),
+            rotation=self._rotate_logs,
+            retention="10 days"
+        )
+
+        # Special handler for metadata block
+        logger.add(
+            sys.stderr,
+            level="DEBUG",
+            format="{message}",
+            filter=lambda record: record["extra"].get("metadata_block", False)
+        )
+        logger.add(
+            self._log_path,
+            format="{message}",
+            filter=lambda record: record["extra"].get("metadata_block", False),
+            rotation=self._rotate_logs,
+            retention="10 days"
+        )
+
         logger.info(f"Logger initialized. Log path: {self._log_path}")
 
     def log_error(self, error: Exception):
@@ -29,8 +60,11 @@ class FileSystemLoguruLogger(Logger):
     def log_warning(self, message):
         logger.warning(message)
 
-    def log_info(self, message):
-        logger.info(message)
+    def log_info(self, message, **kwargs):
+        if kwargs:
+            logger.bind(**kwargs).info(message)
+        else:
+            logger.bind(metadata_block=False).info(message)
 
     def log_debug(self, message):
         logger.debug(message)
@@ -43,6 +77,9 @@ class FileSystemLoguruLogger(Logger):
         if file.tell() > self.FILE_SYSTEM_LOGGER_FILE_SIZE:
             return True  # Rotate the log file
         return False  # Don't rotate the log file
+
+    def context(self, **kwargs):
+        return logger.contextualize(**kwargs)
 
 
 MainLogger = FileSystemLoguruLogger()

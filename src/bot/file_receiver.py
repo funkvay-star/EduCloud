@@ -1,6 +1,9 @@
 from aiogram import types
+import json
 
+# helper modules
 from src.helperModules.definitions import MB
+
 # our modules
 from src.helperModules.message_helper import MessageHelper
 from src.Logger.FileSystemLoguruLogger import MainLogger
@@ -93,8 +96,15 @@ class FileReceiver:
         return metadata
 
     def log_metadata(self, metadata):
-        for key, value in metadata.items():
-            MainLogger.log_info(f"{key}: {value}")
+        with MainLogger.context(metadata_block=True):
+            metadata_log = {
+                "event": "metadata_logging",
+                "details": metadata
+            }
+            MainLogger.log_info(
+                json.dumps(metadata_log, indent=2),
+                metadata_block=True
+                )
 
     def get_file_size(self, message: types.Message):
         message_type = MessageHelper.determine_message_type(message)
