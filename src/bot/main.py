@@ -5,7 +5,10 @@ import sys
 # aiogram modules
 from aiogram import Bot, Dispatcher, types
 
+# our exception handler
 from src.Logger.exceptionHandler import handle_exceptions
+from src.Logger.FileSystemLoguruLogger import MainLogger
+
 # our modules
 from src.bot.file_receiver import FileReceiver
 from src.helperModules.definitions import TOKEN
@@ -13,6 +16,7 @@ from src.helperModules.definitions import TOKEN
 
 class TelegramBot:
     def __init__(self, token: str):
+        MainLogger.log_info(f"Starting the bot with token: AmigoBot")
         self.bot = Bot(token)
         self.dp = Dispatcher()
         self.file_receiver = FileReceiver()
@@ -26,7 +30,7 @@ class TelegramBot:
             await self.file_receiver.classify_and_handle_message(message)
 
         except Exception as e:
-            logging.error(f"Error occurred: {e}")
+            MainLogger.log_error(f"Error occurred: {e}")
             await message.answer("Error processing the message.")
 
     async def start_polling(self) -> None:

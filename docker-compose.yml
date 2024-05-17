@@ -1,17 +1,25 @@
-version: 'X'
+version: '3.8'
 
 services:
   bot:
     build: .
+    container_name: telegram_bot
+    volumes:
+      - ${LOG_DIR}:/usr/src/app/logs  # Use LOG_DIR environment variable
+    environment:
+      - TOKEN=${TOKEN}
+      - LOG_DIR=/usr/src/app/logs  # Set the LOG_DIR environment variable inside the container
+
   postgres:
     image: postgres
     volumes:
-        - postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     ports:
       - "${POSTGRES_PORTS}"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+
 volumes:
   postgres-data:

@@ -17,10 +17,16 @@ A Python-based Telegram bot leveraging GCP to organize and share academic resour
 1. Create a copy of .env_example and rename it to .env.
 2. Fill in all the necessary variables in the .env file.
 
-## Running the Application
+## Running the Application without docker compose (no db, no loggin on main machine)
 To build the Docker image and start the application, run the following commands:
 ```py
 docker build -t telegram_bot .
 docker run -it --name Telegram_bot telegram_bot
+```
+
+## Running the Application with docker compose
+```py
+docker-compose down
+docker-compose up --build
 ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
