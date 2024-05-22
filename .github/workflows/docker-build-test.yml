@@ -19,17 +19,18 @@ jobs:
 
     - name: Run Docker Container
       run: |
-        docker run -d --name telegram_bot telegram_bot_docker
+        docker run -d --name telegram_bot -e STATUS_FILE_PATH=/tmp/bot_status.txt telegram_bot_docker
         
     - name: Sleep For a Short Time
       run: sleep 30s  # Wait for a short time to let the bot start
 
-    - name: Check Logs for Bot Start
+    - name: Check Status File for Bot Start
       run: |
-        if docker logs telegram_bot | grep -q "INFO:aiogram.dispatcher:Start polling"; then
+        if docker exec telegram_bot [ -f /tmp/bot_status.txt ]; then
           echo "Bot started successfully"
           docker stop telegram_bot
         else
           echo "Bot did not start successfully"
+          docker logs telegram_bot  # Print the logs for debugging
           exit 1
         fi

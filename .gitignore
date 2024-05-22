@@ -3,6 +3,11 @@
 __pycache__/
 *.py[cod]
 
+# Ignore all contents of the logs directory
+logs/*
+
+# But do not ignore the logs directory itself
+!logs/
 
 # C extensions
 *.so
@@ -25,3 +30,5 @@ var/
 venv*
 dump*
 .env
+
+.idea
